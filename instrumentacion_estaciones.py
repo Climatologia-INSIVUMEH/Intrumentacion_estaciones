@@ -18,49 +18,49 @@ estaciones=pd.read_html('https://docs.google.com/spreadsheets/d/1h8Ap5ucXhizPzcM
 
 estaciones=estaciones[0]
 
-print(estaciones)
 
-# def popup_html(row):
-#     i = row
-#     Estación=estaciones['Estación'].iloc[i] 
-#     Estado=estaciones['Estado'].iloc[i]
-#     Encargado = estaciones['Encargado'].iloc[i] 
+
+def popup_html(row):
+     i = row
+     Estación=estaciones['Estación'].iloc[i] 
+     Región=estaciones['Región'].iloc[i]
+     instrumentacion = estaciones['Instrumentación Activa'].iloc[i] 
  
-#     left_col_color = "#19a7bd"
-#     right_col_color = "#e4e5df"
+     left_col_color = "#19a7bd"
+     right_col_color = "#e4e5df"
 
-#     html = """<!DOCTYPE html>
-#         <html>
-#         <head>
-#         <h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(Estación) + """
-#         </head>
-#             <table style="height: 126px; width: 350px;">
-#         <tbody>
-#         <tr>
-#         <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Estado</span></td>
-#         <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(Estado) + """
-#         </tr>
-#         <tr>
-#         <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Encargado</span></td>
-#         <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(Encargado) + """
-#         </tr>
+     html = """<!DOCTYPE html>
+         <html>
+         <head>
+         <h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(Estación) + """
+         </head>
+             <table style="height: 126px; width: 350px;">
+         <tbody>
+         <tr>
+         <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Región</span></td>
+         <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(Región) + """
+         </tr>
+         <tr>
+         <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Instrumentos Activos</span></td>
+         <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(instrumentacion) + """
+         </tr>
 
-#         </tbody>
-#         </table>
-#         </html>
-#         """
-#     return html
+         </tbody>
+         </table>
+         </html>
+         """
+     return html
 
 
 
 
 for i in range(0,63):
-    #html = popup_html(i)
-   # iframe = branca.element.IFrame(html=html,width=400,height=230)
-    #popup = folium.Popup(iframe,parse_html=True)
+    html = popup_html(i)
+    iframe = branca.element.IFrame(html=html,width=700,height=350)
+    popup = folium.Popup(iframe,parse_html=True)
     #color = 'green' if estaciones['Estado'].iloc[i] == 'Capacitada' else 'red'
     folium.Marker(location=[estaciones['Latitud'].iloc[i], estaciones['Longitud'].iloc[i]],
-    icon=folium.Icon()).add_to(my_map) 
+                  popup=popup,icon=folium.Icon()).add_to(my_map) 
     
 
 
