@@ -8,6 +8,7 @@ Created on March 14 2023
 import folium
 import pandas as pd
 import branca
+import branca.colormap as cm
 from folium.plugins import MarkerCluster, FloatImage
 
 boulder_coords = [15.5,-90.5]
@@ -17,8 +18,6 @@ my_map = folium.Map(location = boulder_coords, zoom_start = 8, control_scale=Tru
 estaciones=pd.read_html('https://docs.google.com/spreadsheets/d/1h8Ap5ucXhizPzcMz_pfFOZyJmIgGxQw6sX9pyQhkT_M/edit?usp=share_link', match='Estación', header=1)
 
 estaciones=estaciones[0]
-
-
 
 def popup_html(row):
      i = row
@@ -94,7 +93,7 @@ def popup_html(row):
                     <tbody>
                     <tr>
                         <td>{}</td>""".format(instrumentacion)+"""
-                    </tr>
+                    <Punteo/tr>
                     </tbody>
                     <!--Table body-->
                 </table>
@@ -108,29 +107,24 @@ def popup_html(row):
 
 
 
-#  <head>
-# 	    <h4 style="margin-bottom:10">{}</h4>""".format(Estación) + """
-#         </head>
-#              <table style="height: 126px; width: 450px;">
-#          <tbody>
-#          <tr>
-#          <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Instrumentos</span></td>
-#          <td style="width: 50px;background-color: """+ right_col_color +""";">{}</td>""".format(instrumentacion) + """
-#          </tr>
-
-#          </tbody>
-#          </table>
-
-
-
-
-for i in range(0,63):
+for i in range(0,65):
     html = popup_html(i)
     iframe = branca.element.IFrame(html=html,width=500,height=350)
     popup = folium.Popup(iframe,parse_html=True)
-    #color = 'green' if estaciones['Estado'].iloc[i] == 'Capacitada' else 'red'
+    #color = 'green' if estaciones['Ranking'].iloc[i]>= 10 and  else 'red'
+
+    color = None
+    if estaciones['Ranking'].iloc[i] >= 11:
+        color = 'green'
+    elif 5 <= estaciones['Ranking'].iloc[i] < 11:
+        color = 'orange'
+    elif estaciones['Ranking'].iloc[i] < 5:
+        color = 'red'
+    else:
+        print ("error")
+
     folium.Marker(location=[estaciones['Latitud'].iloc[i], estaciones['Longitud'].iloc[i]],
-                  popup=popup,icon=folium.Icon()).add_to(my_map) 
+                  popup=popup,icon=folium.Icon(color=color)).add_to(my_map) 
     
 
 
