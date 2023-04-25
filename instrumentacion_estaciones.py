@@ -25,38 +25,107 @@ def popup_html(row):
      Estación=estaciones['Estación'].iloc[i] 
      Región=estaciones['Región'].iloc[i]
      instrumentacion = estaciones['Instrumentación Activa'].iloc[i] 
- 
-     left_col_color = "#19a7bd"
-     right_col_color = "#e4e5df"
 
-     html = """<!DOCTYPE html>
-         <html>
-         <head>
-         <h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(Estación) + """
-         </head>
-             <table style="height: 126px; width: 350px;">
-         <tbody>
-         <tr>
-         <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Región</span></td>
-         <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(Región) + """
-         </tr>
-         <tr>
-         <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Instrumentos Activos</span></td>
-         <td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(instrumentacion) + """
-         </tr>
+     html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <style type="text/css">
+                    body {{
+                            background-color: #f0f5f9;
+                        }}
 
-         </tbody>
-         </table>
-         </html>
+                    h4 {{
+                                    color: #1c2331;
+                                }}
+                    
+                    table {{
+                        background-color: #fff;
+                        border-radius: 5px;
+                        box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+                        margin: 0px auto;
+                        width: 100%;
+                        max-width: 600px;
+                    }}
+                    
+                    th {{
+                        background-color: #007bff;
+                        color: #fff;
+                        font-weight: bold;
+                        padding: 20px;
+                        text-align: center;
+                        vertical-align: middle;
+                        
+                    }}
+                    
+                    td {{
+                        padding: 8px;
+                        text-align: center;
+                        text-justify: inter-word;
+                        text-transform: capitalize;
+                        vertical-align: middle;
+                    }}
+                    
+                    tr:nth-child(even) {{
+                        background-color: #e7f0f7;
+                    }}
+                    
+                    tr:hover {{
+                        background-color: #c2d4e8;
+                    }}
+
+        </style>
+        </head>
+        <body>
+            <h4 style="margin-bottom:10">{}</h4>""".format(Estación) + """
+            <div class="table-responsive">
+                <!--Table-->
+                <table class="table table-striped">
+
+                    <!--Table head-->
+                    <thead>
+                    <tr>
+                        <th>Instrumentos</th>
+                    </tr>
+                    </thead>
+                    <!--Table head-->
+
+                    <!--Table body-->
+                    <tbody>
+                    <tr>
+                        <td>{}</td>""".format(instrumentacion)+"""
+                    </tr>
+                    </tbody>
+                    <!--Table body-->
+                </table>
+                <!--Table-->
+            </div>
+        </body>
+        </html>
          """
      return html
+
+
+
+#  <head>
+# 	    <h4 style="margin-bottom:10">{}</h4>""".format(Estación) + """
+#         </head>
+#              <table style="height: 126px; width: 450px;">
+#          <tbody>
+#          <tr>
+#          <td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Instrumentos</span></td>
+#          <td style="width: 50px;background-color: """+ right_col_color +""";">{}</td>""".format(instrumentacion) + """
+#          </tr>
+
+#          </tbody>
+#          </table>
 
 
 
 
 for i in range(0,63):
     html = popup_html(i)
-    iframe = branca.element.IFrame(html=html,width=700,height=350)
+    iframe = branca.element.IFrame(html=html,width=500,height=350)
     popup = folium.Popup(iframe,parse_html=True)
     #color = 'green' if estaciones['Estado'].iloc[i] == 'Capacitada' else 'red'
     folium.Marker(location=[estaciones['Latitud'].iloc[i], estaciones['Longitud'].iloc[i]],
