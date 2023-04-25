@@ -25,7 +25,7 @@ def popup_html(row):
      Estación=estaciones['Estación'].iloc[i] 
      Región=estaciones['Región'].iloc[i]
      instrumentacion = estaciones['Instrumentación Activa'].iloc[i] 
-
+     instrumentacion_no_activa = estaciones['Instrumentación No Activa'].iloc[i]
      html = """
         <!DOCTYPE html>
         <html>
@@ -101,6 +101,7 @@ def popup_html(row):
                 <!--Table-->
             </div>
         </body>
+        <p><small>Instrumentación no activa: {}<p><small>""".format(instrumentacion_no_activa) + """
         </html>
          """
      return html
