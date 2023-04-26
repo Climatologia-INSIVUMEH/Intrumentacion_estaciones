@@ -43,7 +43,7 @@ def popup_html(row):
                         border-radius: 5px;
                         box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
                         margin: 0px auto;
-                        width: 100%;
+                        widABRIGO, TERMÓMETRO MÍNIMA, TERMÓMETRO HÚMEDO, TERMÓMETRO SECO, TERMÓMETRO MÁXIMA, ASPIROPSICRÓMETRO, ASPIROPSICRÓMETRO CON VENTILACIÓN, PLUVIÓMETRO, PLUVIÓGRAFO, TERMOHIGRÓGRAFO, VELETA, TANQUE EVAPORACIÓN, HELIÓGRAFO.th: 100%;
                         max-width: 600px;
                     }}
                     
