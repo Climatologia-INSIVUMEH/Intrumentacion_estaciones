@@ -19,6 +19,8 @@ estaciones=pd.read_html('https://docs.google.com/spreadsheets/d/1h8Ap5ucXhizPzcM
 
 estaciones=estaciones[0]
 
+#estaciones.to_csv('data.csv', index=False )
+
 def popup_html(row):
      i = row
      Estación=estaciones['Estación'].iloc[i] 
