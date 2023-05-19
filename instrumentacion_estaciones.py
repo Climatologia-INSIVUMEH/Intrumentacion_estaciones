@@ -5,6 +5,7 @@ Created on March 14 2023
 
 @author: rainy
 """
+
 import folium
 import pandas as pd
 import branca
@@ -21,120 +22,120 @@ estaciones=estaciones[0]
 
 #estaciones.to_csv('data.csv', index=False )
 
-def popup_html(row):
-     i = row
-     Estación=estaciones['Estación'].iloc[i] 
-     Región=estaciones['Región'].iloc[i]
-     instrumentacion = estaciones['Instrumentación Activa'].iloc[i] 
-     instrumentacion_no_activa = estaciones['Instrumentación No Activa'].iloc[i]
-     html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <style type="text/css">
-                    body {{
-                            background-color: #f0f5f9;
-                        }}
+# def popup_html(row):
+#      i = row
+#      Estación=estaciones['Estación'].iloc[i] 
+#      Región=estaciones['Región'].iloc[i]
+#      instrumentacion = estaciones['Instrumentación Activa'].iloc[i] 
+#      instrumentacion_no_activa = estaciones['Instrumentación No Activa'].iloc[i]
+#      html = """
+#         <!DOCTYPE html>
+#         <html>
+#         <head>
+#         <style type="text/css">
+#                     body {{
+#                             background-color: #f0f5f9;
+#                         }}
 
-                    h4 {{
-                                    color: #1c2331;
-                                }}
+#                     h4 {{
+#                                     color: #1c2331;
+#                                 }}
                     
-                    table {{
-                        background-color: #fff;
-                        border-radius: 5px;
-                        box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-                        margin: 0px auto;
-                        widABRIGO, TERMÓMETRO MÍNIMA, TERMÓMETRO HÚMEDO, TERMÓMETRO SECO, TERMÓMETRO MÁXIMA, ASPIROPSICRÓMETRO, ASPIROPSICRÓMETRO CON VENTILACIÓN, PLUVIÓMETRO, PLUVIÓGRAFO, TERMOHIGRÓGRAFO, VELETA, TANQUE EVAPORACIÓN, HELIÓGRAFO.th: 100%;
-                        max-width: 600px;
-                    }}
+#                     table {{
+#                         background-color: #fff;
+#                         border-radius: 5px;
+#                         box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+#                         margin: 0px auto;
+#                         widABRIGO, TERMÓMETRO MÍNIMA, TERMÓMETRO HÚMEDO, TERMÓMETRO SECO, TERMÓMETRO MÁXIMA, ASPIROPSICRÓMETRO, ASPIROPSICRÓMETRO CON VENTILACIÓN, PLUVIÓMETRO, PLUVIÓGRAFO, TERMOHIGRÓGRAFO, VELETA, TANQUE EVAPORACIÓN, HELIÓGRAFO.th: 100%;
+#                         max-width: 600px;
+#                     }}
                     
-                    th {{
-                        background-color: #007bff;
-                        color: #fff;
-                        font-weight: bold;
-                        padding: 20px;
-                        text-align: center;
-                        vertical-align: middle;
+#                     th {{
+#                         background-color: #007bff;
+#                         color: #fff;
+#                         font-weight: bold;
+#                         padding: 20px;
+#                         text-align: center;
+#                         vertical-align: middle;
                         
-                    }}
+#                     }}
                     
-                    td {{
-                        padding: 8px;
-                        text-align: center;
-                        text-justify: inter-word;
-                        text-transform: capitalize;
-                        vertical-align: middle;
-                    }}
+#                     td {{
+#                         padding: 8px;
+#                         text-align: center;
+#                         text-justify: inter-word;
+#                         text-transform: capitalize;
+#                         vertical-align: middle;
+#                     }}
                     
-                    tr:nth-child(even) {{
-                        background-color: #e7f0f7;
-                    }}
+#                     tr:nth-child(even) {{
+#                         background-color: #e7f0f7;
+#                     }}
                     
-                    tr:hover {{
-                        background-color: #c2d4e8;
-                    }}
+#                     tr:hover {{
+#                         background-color: #c2d4e8;
+#                     }}
 
-        </style>
-        </head>
-        <body>
-            <h4 style="margin-bottom:10">{}</h4>""".format(Estación) + """
-            <div class="table-responsive">
-                <!--Table-->
-                <table class="table table-striped">
+#         </style>
+#         </head>
+#         <body>
+#             <h4 style="margin-bottom:10">{}</h4>""".format(Estación) + """
+#             <div class="table-responsive">
+#                 <!--Table-->
+#                 <table class="table table-striped">
 
-                    <!--Table head-->
-                    <thead>
-                    <tr>
-                        <th>Instrumentos</th>
-                    </tr>
-                    </thead>
-                    <!--Table head-->
+#                     <!--Table head-->
+#                     <thead>
+#                     <tr>
+#                         <th>Instrumentos</th>
+#                     </tr>
+#                     </thead>
+#                     <!--Table head-->
 
-                    <!--Table body-->
-                    <tbody>
-                    <tr>
-                        <td>{}</td>""".format(instrumentacion)+"""
-                    <Punteo/tr>
-                    </tbody>
-                    <!--Table body-->
-                </table>
-                <!--Table-->
-            </div>
-        </body>
-        <p><small>Instrumentación no activa: {}<p><small>""".format(instrumentacion_no_activa) + """
-        </html>
-         """
-     return html
+#                     <!--Table body-->
+#                     <tbody>
+#                     <tr>
+#                         <td>{}</td>""".format(instrumentacion)+"""
+#                     <Punteo/tr>
+#                     </tbody>
+#                     <!--Table body-->
+#                 </table>
+#                 <!--Table-->
+#             </div>
+#         </body>
+#         <p><small>Instrumentación no activa: {}<p><small>""".format(instrumentacion_no_activa) + """
+#         </html>
+#          """
+#      return html
 
 
 
-for i in range(0,64):
-    html = popup_html(i)
-    iframe = branca.element.IFrame(html=html,width=500,height=350)
-    popup = folium.Popup(iframe,parse_html=True)
-    #color = 'green' if estaciones['Ranking'].iloc[i]>= 10 and  else 'red'
+# for i in range(0,64):
+#     html = popup_html(i)
+#     iframe = branca.element.IFrame(html=html,width=500,height=350)
+#     popup = folium.Popup(iframe,parse_html=True)
+#     #color = 'green' if estaciones['Ranking'].iloc[i]>= 10 and  else 'red'
 
-    color = None
-    if estaciones['Ranking'].iloc[i] >= 11:
-        color = 'green'
-    elif 5 <= estaciones['Ranking'].iloc[i] < 11:
-        color = 'orange'
-    elif estaciones['Ranking'].iloc[i] < 5:
-        color = 'red'
-    else:
-        print ("error")
+#     color = None
+#     if estaciones['Ranking'].iloc[i] >= 11:
+#         color = 'green'
+#     elif 5 <= estaciones['Ranking'].iloc[i] < 11:
+#         color = 'orange'
+#     elif estaciones['Ranking'].iloc[i] < 5:
+#         color = 'red'
+#     else:
+#         print ("error")
 
-    folium.Marker(location=[estaciones['Latitud'].iloc[i], estaciones['Longitud'].iloc[i]],
-                  popup=popup,icon=folium.Icon(color=color)).add_to(my_map) 
+#     folium.Marker(location=[estaciones['Latitud'].iloc[i], estaciones['Longitud'].iloc[i]],
+#                   popup=popup,icon=folium.Icon(color=color)).add_to(my_map) 
     
 
 
-folium.LayerControl(position="bottomright").add_to(my_map)
+# folium.LayerControl(position="bottomright").add_to(my_map)
 
         
-logo = ("https://raw.githubusercontent.com/PeterArgueta/clima/main/logo.png")
+# logo = ("https://raw.githubusercontent.com/PeterArgueta/clima/main/logo.png")
 
-FloatImage(logo, bottom=5, left=1, width='80px').add_to(my_map)
+# FloatImage(logo, bottom=5, left=1, width='80px').add_to(my_map)
 
-my_map.save("index.html")
+# my_map.save("index.html")
