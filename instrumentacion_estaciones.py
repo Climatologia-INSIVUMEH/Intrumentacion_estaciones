@@ -109,7 +109,7 @@ def popup_html(row):
 
 
 
-for i in range(0,65):
+for i in range(0,64):
     html = popup_html(i)
     iframe = branca.element.IFrame(html=html,width=500,height=350)
     popup = folium.Popup(iframe,parse_html=True)
