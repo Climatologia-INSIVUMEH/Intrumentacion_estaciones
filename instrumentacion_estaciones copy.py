@@ -9,83 +9,14 @@ Created on March 14 2023
 import folium
 import pandas as pd
 import branca
-import random
 import branca.colormap as cm
-from folium.plugins import MarkerCluster, MiniMap, MousePosition, MeasureControl, Geocoder, FloatImage, LocateControl
+from folium.plugins import MarkerCluster, FloatImage
 
 boulder_coords = [15.5,-90.5]
-my_map = folium.Map(location = boulder_coords, zoom_start = 7, control_scale=True)
-
-loc = 'VARIABLES CONVENCIONALES - Departamento de Investigación y Servicios Meteorológicos - INSIVUMEH'
-title_html = '''
-             <h3 align="center" style="font-size:16px"><b>{}</b></h3>
-             '''.format(loc)   
-
+my_map = folium.Map(location = boulder_coords, zoom_start = 8, control_scale=True)
 
 
 estaciones=pd.read_html('https://docs.google.com/spreadsheets/d/1h8Ap5ucXhizPzcMz_pfFOZyJmIgGxQw6sX9pyQhkT_M/edit?usp=share_link', match='Estación', header=1)
-
-#### Enlaces ####
-regiones_clima='https://raw.githubusercontent.com/PeterArgueta/clima/main/rc.geojson'
-departamentos='https://raw.githubusercontent.com/PeterArgueta/clima/main/deptos_gt.geojson'
-belice='data/Belice.geojson'
-
-#### Style ####
-style_function = lambda x: {'fillColor': '#ffffff', 
-                            'color':'#000000', 
-                            'fillOpacity': 0.1,
-                            'weight':0.1}
-
-
-style_function2 = lambda x: {'fillColor': '#ffffff', 
-                            'color':'#000000', 
-                            'fillOpacity': 0.1,
-                            'weight':1,
-                            "dashArray": "5, 5"}
-
-
-def random_color(feature):
-    return {'fillColor': f"#{random.randint(0, 0xFFFFFF):06x}", 'color': '#000000',
-                            'fillOpacity': 0.4,
-                            'weight':0.8}
-
-
-highlight_function = lambda x: {'fillColor': '#e78829', 
-                                'color':'#000000', 
-                                'fillOpacity': 0.5, 
-                                'weight': 0.8}
-
-#### REGIONES CLIMATICAS ####
-R=folium.GeoJson(
-    regiones_clima, name="Regiones Climáticas",
-    style_function=style_function,
-    highlight_function=random_color,
-    show=(True), embed=True,
-    tooltip=folium.features.GeoJsonTooltip(
-        fields=['NOMBRE'],  # use fields from the json file
-        aliases=[''],
-        style=("background-color: white; color: #000000; font-family: arial; font-size: 12px; padding: 10px;") 
-    ), 
-).add_to(my_map)
-
-folium.GeoJson(
-    departamentos, name="Departamentos",
-    style_function=style_function2,
-    show=(True)
-).add_to(my_map)
-
-folium.GeoJson(
-    belice, name="Diferendo Territorial y Marítimo",
-    style_function=style_function2,
-    show=(True),
-    tooltip=folium.features.GeoJsonTooltip(
-        fields=['Nombre'],  # use fields from the json file
-        aliases=[''],
-        style=("background-color: white; color: #000000; font-family: arial; font-size: 12px; padding: 10px;") 
-    )
-).add_to(my_map)
-
-
 
 estaciones=estaciones[0]
 
@@ -95,8 +26,8 @@ def popup_html(row):
      i = row
      Estación=estaciones['Estación'].iloc[i] 
      Región=estaciones['Región'].iloc[i]
-     instrumentacion = estaciones['Variables de medición (REPORTADAS DIARIAMENTE)'].iloc[i] 
-     #instrumentacion_no_activa = estaciones['Instrumentación No Activa'].iloc[i]
+     instrumentacion = estaciones['Instrumentación Activa'].iloc[i] 
+     instrumentacion_no_activa = estaciones['Instrumentación No Activa'].iloc[i]
      html = """
         <!DOCTYPE html>
         <html>
@@ -156,7 +87,7 @@ def popup_html(row):
                     <!--Table head-->
                     <thead>
                     <tr>
-                        <th>Variables de medición (REPORTADAS DIARIAMENTE)</th>
+                        <th>Instrumentos</th>
                     </tr>
                     </thead>
                     <!--Table head-->
@@ -172,6 +103,7 @@ def popup_html(row):
                 <!--Table-->
             </div>
         </body>
+        <p><small>Instrumentación no activa: {}<p><small>""".format(instrumentacion_no_activa) + """
         </html>
          """
      return html
@@ -205,22 +137,5 @@ folium.LayerControl(position="bottomright").add_to(my_map)
 logo = ("https://raw.githubusercontent.com/PeterArgueta/clima/main/logo.png")
 
 FloatImage(logo, bottom=5, left=1, width='80px').add_to(my_map)
-
-folium.LayerControl(position="bottomright").add_to(my_map)
-my_map.keep_in_front(R)
-
-
-MousePosition( 
-    position='bottomright', 
-    separator=' | ', 
-    prefix="Mouse:", 
-    num_digits=3, 
-    #lat_formatter=fmtr, 
-    #lng_formatter=fmtr 
-).add_to(my_map) 
-
-LocateControl().add_to(my_map)
-#Geocoder().add_to(my_map)
-my_map.get_root().html.add_child(folium.Element(title_html))
 
 my_map.save("index.html")
